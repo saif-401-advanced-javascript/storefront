@@ -7,10 +7,12 @@ import Button from '@material-ui/core/Button';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import ClearIcon from '@material-ui/icons/Clear';
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
 import { connect } from 'react-redux';
 import { deleteFromCart } from '../../reducers/actions';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   root: {
     position: 'absolute',
     left: 0,
@@ -21,13 +23,27 @@ const useStyles = makeStyles({
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center'
+  },
+  snackBar: {
+    width: '100%',
+    '& > * + *': {
+      marginTop: theme.spacing(2)
+    }
   }
-});
+}));
+
+function Alert(props) {
+  return <MuiAlert elevation={6} variant='filled' {...props} />;
+}
 
 const Header = (props) => {
   let numberOfProducts = props.cart.cartList.reduce((acc, product) => {
     return acc + product.count;
   }, 0);
+
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [open, setOpen] = useState(false);
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -35,7 +51,19 @@ const Header = (props) => {
   const handleClose = () => {
     setAnchorEl(null);
   };
-  const [anchorEl, setAnchorEl] = useState(null);
+
+  const handleCloseForAlert = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpen(false);
+  };
+
+  const deleteItem = (name) => {
+    props.deleteFromCart(name);
+    setOpen(true);
+  };
   const classes = useStyles();
   return (
     <AppBar position='static' className={classes.root}>
@@ -60,9 +88,18 @@ const Header = (props) => {
               <div className={classes.flex}>
                 <MenuItem key={product.name}>{product.name}</MenuItem>
                 <Typography variant='p'>{product.count}</Typography>
-                <Button onClick={() => props.deleteFromCart(product.name)}>
+                <Button onClick={() => deleteItem(product.name)}>
                   <ClearIcon color='secondary' fontSize='small' />
                 </Button>
+                <Snackbar
+                  open={open}
+                  autoHideDuration={1000}
+                  onClose={handleCloseForAlert}
+                >
+                  <Alert onClose={handleCloseForAlert} severity='warning'>
+                    Removed from cart successfully
+                  </Alert>
+                </Snackbar>
               </div>
             );
           })}

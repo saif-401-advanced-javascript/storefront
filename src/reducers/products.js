@@ -75,7 +75,9 @@ export default (state = initialState, action) => {
     case 'ADD_TO_CART':
       let reducedNumber = state.products.map((product) => {
         if (product.name === payload) {
-          product.inStock--;
+          if (product.inStock > 0) {
+            product.inStock--;
+          }
         }
         return product;
       });

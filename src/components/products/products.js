@@ -9,23 +9,55 @@ import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
 import { addToCart } from '../../reducers/actions';
+import { useState } from 'react';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   root: {
     maxWidth: 345
   },
-
   grid: {
     flexGrow: 1
   },
   title: {
     marginBottom: '50px',
     textAlign: 'center'
+  },
+  snackBar: {
+    width: '100%',
+    '& > * + *': {
+      marginTop: theme.spacing(2)
+    }
   }
-});
+}));
+
+function Alert(props) {
+  return <MuiAlert elevation={6} variant='filled' {...props} />;
+}
 
 const Products = (props) => {
+  const [open, setOpen] = useState(false);
+
+  const addItem = (name) => {
+    props.addToCart(name);
+    let item = props.products.products.filter(
+      (product) => product.name === name
+    )[0];
+    if (item.inStock > 0) {
+      setOpen(true);
+    }
+  };
+
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpen(false);
+  };
+
   const classes = useStyles();
   let activated = props.categories.categories.filter(
     (category) => category.name === props.categories.activeProduct
@@ -66,10 +98,19 @@ const Products = (props) => {
                     <Button
                       size='small'
                       color='primary'
-                      onClick={() => props.addToCart(product.name)}
+                      onClick={() => addItem(product.name)}
                     >
                       Add To Cart
                     </Button>
+                    <Snackbar
+                      open={open}
+                      autoHideDuration={1000}
+                      onClose={handleClose}
+                    >
+                      <Alert onClose={handleClose} severity='success'>
+                        Added to cart successfully
+                      </Alert>
+                    </Snackbar>
                     <Button size='small' color='primary'>
                       View Details
                     </Button>
