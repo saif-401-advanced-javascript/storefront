@@ -8,7 +8,6 @@ import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles({
   root: {
-    position: 'absolute',
     left: 0,
     bottom: 0,
     right: 0
@@ -21,7 +20,7 @@ const useStyles = makeStyles({
 export default function Footer() {
   const classes = useStyles();
   return (
-    <AppBar position='static' className={classes.root}>
+    <AppBar position='relative' className={classes.root}>
       <Toolbar>
         <Typography variant='h6'>
           Made By

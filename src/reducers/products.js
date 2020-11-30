@@ -1,24 +1,5 @@
 /* eslint-disable import/no-anonymous-default-export */
 const initialState = {
-  categories: [
-    {
-      name: 'electronics',
-      displayName: 'Elecronics',
-      description: 'Awesome Electronics'
-    },
-    {
-      name: 'food',
-      displayName: 'Food',
-      description: 'Food? is that even a thing?'
-    },
-    {
-      name: 'clothing',
-      displayName: 'Clothing',
-      description:
-        'Things might you will never need but you gonna but it anyway'
-    }
-  ],
-
   products: [
     {
       name: 'TV',
@@ -75,35 +56,43 @@ const initialState = {
       image:
         'https://toppng.com/uploads/preview/bread-png-image-loaf-of-bread-11563103187ssm8yazedr.png'
     }
-  ],
-
-  activeProduct: 'electronics'
+  ]
 };
 
-// Reducer
+// Product Reducer
 
 export default (state = initialState, action) => {
-  //   console.log('STATE??', state, 'Action', action);
   const { type, payload } = action;
-  //   Should be inistial state instead ot state because the state is changing
+
   switch (type) {
     case 'ACTIVATED':
-      let newArray = initialState.products.filter(
+      let activeProducts = initialState.products.filter(
         (product) => product.category === payload
       );
       return {
-        categories: state.categories,
-        products: newArray,
-        activeProduct: payload
+        products: activeProducts
+      };
+    case 'ADD_TO_CART':
+      let reducedNumber = state.products.map((product) => {
+        if (product.name === payload) {
+          product.inStock--;
+        }
+        return product;
+      });
+      return {
+        products: reducedNumber
+      };
+    case 'DELETE_FROM_CART':
+      let increaseNumber = state.products.map((product) => {
+        if (product.name === payload) {
+          product.inStock++;
+        }
+        return product;
+      });
+      return {
+        products: increaseNumber
       };
     default:
       return state;
   }
-};
-
-export const activate = (name) => {
-  return {
-    type: 'ACTIVATED',
-    payload: name
-  };
 };

@@ -1,10 +1,11 @@
 import { connect } from 'react-redux';
-import { activate } from '../../store/state';
+// import { activate } from '../../store/state';
 import { makeStyles } from '@material-ui/core/styles';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
+import { activate } from '../../reducers/actions';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -18,6 +19,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Categories = (props) => {
+  // console.log(props);
   const classes = useStyles();
   return (
     <section>
@@ -31,7 +33,7 @@ const Categories = (props) => {
         }
         className={classes.root}
       >
-        {props.store.categories.map((category) => {
+        {props.categories.categories.map((category) => {
           return (
             <ListItem
               button
@@ -48,7 +50,9 @@ const Categories = (props) => {
 };
 
 const mapStateToProps = (state) => {
-  return { store: state.category };
+  return {
+    categories: state.categories
+  };
 };
 
 const mapDispatchToProps = { activate };

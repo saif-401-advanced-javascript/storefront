@@ -12,6 +12,10 @@ StoreFront application written in react, we will go throw 4 Phases to finish the
 
 3. use `npm start` to start the application
 
+## Deploy Link
+
+[https://storefront-saif.netlify.app/](https://storefront-saif.netlify.app/)
+
 ## Phase 1
 
 ### Requirements
@@ -24,4 +28,20 @@ StoreFront application written in react, we will go throw 4 Phases to finish the
 
 ### UML
 
-![UML Phase # 1](./assets/Phase1VS.jpg)
+![UML](./assets/Phase1VS.jpg)
+
+## Phase 2
+
+### Requirements
+
+- As a user,you can choose from products in the list and add them to your shopping cart
+
+- As a user, you can see the products that you have added to your shopping cart so that
+
+- As a user, you can change the quantity of items you intend to purchase in your shopping cart
+
+- As a user, you will be able to remove an item from my shopping cart
+
+### UML
+
+![UML](./assets/Phase2VS.jpg)

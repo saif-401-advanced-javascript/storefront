@@ -9,6 +9,7 @@ import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
+import { addToCart } from '../../reducers/actions';
 
 const useStyles = makeStyles({
   root: {
@@ -26,8 +27,8 @@ const useStyles = makeStyles({
 
 const Products = (props) => {
   const classes = useStyles();
-  let activated = props.store.categories.filter(
-    (category) => category.name === props.store.activeProduct
+  let activated = props.categories.categories.filter(
+    (category) => category.name === props.categories.activeProduct
   );
   return (
     <section className={classes.grid}>
@@ -36,8 +37,8 @@ const Products = (props) => {
         <Typography variant='body1'>{activated[0].description}</Typography>
       </div>
       <Grid container spacing={3}>
-        {props.store.products.map((product) => {
-          if (product.category === props.store.activeProduct) {
+        {props.products.products.map((product) => {
+          if (product.category === props.categories.activeProduct) {
             return (
               <Grid item xs={3}>
                 <Card className={classes.root}>
@@ -50,13 +51,23 @@ const Products = (props) => {
                       title={product.name}
                     />
                     <CardContent>
-                      <Typography gutterBottom variant='h5' component='h2'>
+                      <Typography gutterBottom variant='h4' component='h4'>
                         {product.name}
+                      </Typography>
+                      <Typography gutterBottom variant='h5' component='h5'>
+                        In Stock : {product.inStock}
+                      </Typography>
+                      <Typography gutterBottom variant='h5' component='h5'>
+                        Price : {product.price} JD
                       </Typography>
                     </CardContent>
                   </CardActionArea>
                   <CardActions>
-                    <Button size='small' color='primary'>
+                    <Button
+                      size='small'
+                      color='primary'
+                      onClick={() => props.addToCart(product.name)}
+                    >
                       Add To Cart
                     </Button>
                     <Button size='small' color='primary'>
@@ -74,7 +85,12 @@ const Products = (props) => {
 };
 
 const mapStateToProps = (state) => {
-  return { store: state.category };
+  return {
+    categories: state.categories,
+    products: state.products
+  };
 };
 
-export default connect(mapStateToProps)(Products);
+const mapDispatchToProps = { addToCart };
+
+export default connect(mapStateToProps, mapDispatchToProps)(Products);
