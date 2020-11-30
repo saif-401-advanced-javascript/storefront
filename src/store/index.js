@@ -1,7 +1,6 @@
 import categoryReducer from './state';
-
-const { createStore, combineReducers } = require('redux');
-const { composeWithDevTools } = require('redux-devtools-extension');
+import { createStore, combineReducers } from 'redux';
+import { composeWithDevTools } from 'redux-devtools-extension';
 
 const reducers = combineReducers({ category: categoryReducer });
 
