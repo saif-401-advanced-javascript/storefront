@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable array-callback-return */
 import { connect } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
@@ -11,8 +12,8 @@ import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
-import { addToCart } from '../../reducers/actions';
-import { useState } from 'react';
+import { addToCart, getProducts } from '../../reducers/actions';
+import { useState, useEffect } from 'react';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -40,11 +41,13 @@ function Alert(props) {
 const Products = (props) => {
   const [open, setOpen] = useState(false);
 
+  useEffect(() => {
+    props.getProducts();
+  }, []);
+
   const addItem = (name) => {
     props.addToCart(name);
-    let item = props.products.products.filter(
-      (product) => product.name === name
-    )[0];
+    let item = props.products.filter((product) => product.name === name)[0];
     if (item.inStock > 0) {
       setOpen(true);
     }
@@ -59,17 +62,18 @@ const Products = (props) => {
   };
 
   const classes = useStyles();
-  let activated = props.categories.categories.filter(
-    (category) => category.name === props.categories.activeProduct
-  );
+  // let activated = props.categories.categories.filter(
+  //   (category) => category.name === props.categories.activeProduct
+  // );
+  // console.log(activated);
   return (
     <section className={classes.grid}>
       <div className={classes.title}>
-        <Typography variant='h3'>{activated[0].displayName}</Typography>
-        <Typography variant='body1'>{activated[0].description}</Typography>
+        {/* <Typography variant='h3'>{activated[0].displayName}</Typography>
+        <Typography variant='body1'>{activated[0].description}</Typography> */}
       </div>
       <Grid container spacing={3}>
-        {props.products.products.map((product) => {
+        {props.products.map((product) => {
           if (product.category === props.categories.activeProduct) {
             return (
               <Grid item xs={3}>
@@ -128,10 +132,10 @@ const Products = (props) => {
 const mapStateToProps = (state) => {
   return {
     categories: state.categories,
-    products: state.products
+    products: state.products.products
   };
 };
 
-const mapDispatchToProps = { addToCart };
+const mapDispatchToProps = { addToCart, getProducts };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Products);

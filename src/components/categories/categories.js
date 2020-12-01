@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { connect } from 'react-redux';
 // import { activate } from '../../store/state';
 import { makeStyles } from '@material-ui/core/styles';
@@ -5,7 +6,8 @@ import ListSubheader from '@material-ui/core/ListSubheader';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
-import { activate } from '../../reducers/actions';
+import { activate, getCategories } from '../../reducers/actions';
+import { useEffect } from 'react';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -19,7 +21,10 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Categories = (props) => {
-  // console.log(props);
+  useEffect(() => {
+    props.getCategories();
+  }, []);
+
   const classes = useStyles();
   return (
     <section>
@@ -33,14 +38,14 @@ const Categories = (props) => {
         }
         className={classes.root}
       >
-        {props.categories.categories.map((category) => {
+        {props.categories.map((category) => {
           return (
             <ListItem
               button
               key={category.name}
               onClick={() => props.activate(category.name)}
             >
-              <ListItemText primary={category.displayName} />
+              <ListItemText primary={category.name.toUpperCase()} />
             </ListItem>
           );
         })}
@@ -51,10 +56,10 @@ const Categories = (props) => {
 
 const mapStateToProps = (state) => {
   return {
-    categories: state.categories
+    categories: state.categories.categories
   };
 };
 
-const mapDispatchToProps = { activate };
+const mapDispatchToProps = { activate, getCategories };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Categories);
