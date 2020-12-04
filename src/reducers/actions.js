@@ -1,7 +1,7 @@
 import superagent from 'superagent';
 
-const API_LINK_Products = 'http://api-js401.herokuapp.com/api/v1/products';
-const API_LINK_Categories = 'http://api-js401.herokuapp.com/api/v1/categories';
+const API_LINK_Products = 'https://api-js401.herokuapp.com/api/v1/products';
+const API_LINK_Categories = 'https://api-js401.herokuapp.com/api/v1/categories';
 
 export const getCategories = () => {
   return (dispatch) => {
