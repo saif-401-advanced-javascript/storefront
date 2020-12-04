@@ -11,7 +11,6 @@ export default (state = initialState, action) => {
 
   switch (type) {
     case 'ACTIVATED':
-      console.log(initialState);
       let activeProducts = initialState.activatedProducts.filter(
         (product) => product.category === payload
       );
@@ -20,9 +19,9 @@ export default (state = initialState, action) => {
       };
     case 'ADD_TO_CART':
       let reducedNumber = state.products.map((product) => {
-        if (product.name === payload) {
+        if (product._id === payload.id) {
           if (product.inStock > 0) {
-            product.inStock--;
+            product.inStock = payload.inStock;
           }
         }
         return product;
@@ -32,8 +31,8 @@ export default (state = initialState, action) => {
       };
     case 'DELETE_FROM_CART':
       let increaseNumber = state.products.map((product) => {
-        if (product.name === payload) {
-          product.inStock++;
+        if (product._id === payload.id) {
+          product.inStock = payload.inStock;
         }
         return product;
       });

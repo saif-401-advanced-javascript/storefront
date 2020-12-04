@@ -1,62 +1,6 @@
 /* eslint-disable import/no-anonymous-default-export */
 const initialState = {
-  products: [
-    {
-      name: 'TV',
-      category: 'electronics',
-      price: 699.0,
-      inStock: 5,
-      image:
-        'https://cdn.pixabay.com/photo/2018/12/22/03/27/smart-tv-3889141_960_720.png'
-    },
-    {
-      name: 'Radio',
-      category: 'electronics',
-      price: 99.0,
-      inStock: 15,
-      image:
-        'https://pluspng.com/img-png/radio-hd-png-radio-picture-png-image-500.png'
-    },
-    {
-      name: 'Shirt',
-      category: 'clothing',
-      price: 9.0,
-      inStock: 25,
-      image: 'https://pngimg.com/uploads/dress_shirt/dress_shirt_PNG8117.png'
-    },
-    {
-      name: 'Socks',
-      category: 'clothing',
-      price: 12.0,
-      inStock: 10,
-      image:
-        'https://www.pngfind.com/pngs/m/14-143267_socks-png-background-image-sock-transparent-png.png'
-    },
-    {
-      name: 'Apples',
-      category: 'food',
-      price: 0.99,
-      inStock: 500,
-      image:
-        'https://e1.pngegg.com/pngimages/23/306/png-clipart-new-s-two-red-apples-thumbnail.png'
-    },
-    {
-      name: 'Eggs',
-      category: 'food',
-      price: 1.99,
-      inStock: 12,
-      image:
-        'https://w7.pngwing.com/pngs/439/922/png-transparent-chicken-egg-yolk-egg-eggshell-broken-egg-easter-eggs.png'
-    },
-    {
-      name: 'Bread',
-      category: 'food',
-      price: 2.39,
-      inStock: 90,
-      image:
-        'https://toppng.com/uploads/preview/bread-png-image-loaf-of-bread-11563103187ssm8yazedr.png'
-    }
-  ],
+  products: [],
   cartList: []
 };
 
@@ -68,30 +12,38 @@ export default (state = initialState, action) => {
   switch (type) {
     case 'ADD_TO_CART':
       let addItem = [...state.cartList];
-      let item = initialState.products.filter(
-        (product) => product.name === payload
+      let item = state.products.filter(
+        (product) => product._id === payload.id
       )[0];
-      let alreadyThere = addItem.filter((product) => product.name === payload);
+      let alreadyThere = addItem.filter((product) => product.id === payload.id);
       if (alreadyThere.length) {
         let increaseNumber = addItem.map((product) => {
-          if (product.name === payload) {
-            if (item.inStock !== product.count) {
+          if (product.id === payload.id) {
+            if (item.inStock + 1 > 0) {
               product.count++;
             }
           }
           return product;
         });
-        return { cartList: increaseNumber };
+        return {
+          products: state.products,
+          cartList: increaseNumber
+        };
       } else {
-        addItem.push({ name: payload, count: 1 });
+        addItem.push({
+          name: item.name,
+          count: 1,
+          id: item._id
+        });
       }
       return {
+        products: state.products,
         cartList: addItem
       };
     case 'DELETE_FROM_CART':
       let removedItem = [...state.cartList];
       let decreaseNumber = removedItem.reduce((acc, product) => {
-        if (product.name === payload) {
+        if (product.id === payload.id) {
           if (product.count > 1) {
             product.count--;
             acc.push(product);
@@ -102,7 +54,13 @@ export default (state = initialState, action) => {
         return acc;
       }, []);
       return {
+        products: state.products,
         cartList: decreaseNumber
+      };
+    case 'GET_PRO':
+      return {
+        products: payload,
+        cartList: state.cartList
       };
 
     default:

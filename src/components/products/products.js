@@ -45,9 +45,9 @@ const Products = (props) => {
     props.getProducts();
   }, []);
 
-  const addItem = (name) => {
-    props.addToCart(name);
-    let item = props.products.filter((product) => product.name === name)[0];
+  const addItem = (id, number) => {
+    props.addToCart(id, number);
+    let item = props.products.filter((product) => product._id === id)[0];
     if (item.inStock > 0) {
       setOpen(true);
     }
@@ -102,7 +102,7 @@ const Products = (props) => {
                     <Button
                       size='small'
                       color='primary'
-                      onClick={() => addItem(product.name)}
+                      onClick={() => addItem(product._id, product.inStock)}
                     >
                       Add To Cart
                     </Button>

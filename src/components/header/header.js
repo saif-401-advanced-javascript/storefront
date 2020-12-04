@@ -60,8 +60,8 @@ const Header = (props) => {
     setOpen(false);
   };
 
-  const deleteItem = (name) => {
-    props.deleteFromCart(name);
+  const deleteItem = (id) => {
+    props.deleteFromCart(id);
     setOpen(true);
   };
   const classes = useStyles();
@@ -88,7 +88,7 @@ const Header = (props) => {
               <div className={classes.flex}>
                 <MenuItem key={product.name}>{product.name}</MenuItem>
                 <Typography variant='p'>{product.count}</Typography>
-                <Button onClick={() => deleteItem(product.name)}>
+                <Button onClick={() => deleteItem(product.id)}>
                   <ClearIcon color='secondary' fontSize='small' />
                 </Button>
                 <Snackbar
